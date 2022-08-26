@@ -1,33 +1,33 @@
 apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
-  name: initiative-api-service
+  name: initiative-client-service
 spec:
   selector:
-    app: initiative-api-app
+    app: initiative-client-app
   ports:
     - protocol: "TCP"
       port: 80 # The port that the service is running on in the cluster
-      targetPort: 8080 # The port exposed by the service
+      targetPort: 3000 # The port exposed by the service
   type: LoadBalancer # type of the service. LoadBalancer indicates that our service will be external.
 ---
 apiVersion: apps/v1
 kind: Deployment # Kubernetes resource kind we are creating
 metadata:
-  name: initiative-api-app
+  name: initiative-client-app
 spec:
   selector:
     matchLabels:
-      app: initiative-api-app
-  replicas: 2 # Number of replicas that will be created for this deployment
+      app: initiative-client-app
+  replicas: 1 # Number of replicas that will be created for this deployment
   template:
     metadata:
       labels:
-        app: initiative-api-app
+        app: initiative-client-app
     spec:
       containers:
-        - name: initiative-api-app
-          image: albinprivateregistry.azurecr.io/initiative-api # Image that will be used to containers in the cluster
+        - name: initiative-client-app
+          image: albinprivateregistry.azurecr.io/initiative-client # Image that will be used to containers in the cluster
           imagePullPolicy: Always
           resources:
             requests:
@@ -35,6 +35,6 @@ spec:
               memory: 128Mi
             limits:
               cpu: 250m
-              memory: 256Mi
+              memory: 1024Mi
           ports:
-            - containerPort: 8080 # The port that the container is running on in the cluster
+            - containerPort: 3000 # The port that the container is running on in the cluster
