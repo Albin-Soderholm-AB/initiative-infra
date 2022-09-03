@@ -20,10 +20,10 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       
-      - name: Switch dir
-        run: cd initiative-client
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.1.0
+        with:
+          charts_dir: initiative-client
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
