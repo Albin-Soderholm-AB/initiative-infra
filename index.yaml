@@ -1,5 +1,15 @@
 apiVersion: v1
 entries:
+  initiative-api:
+  - apiVersion: v2
+    created: "2022-09-03T20:16:31.305739708Z"
+    description: A Helm chart for Kubernetes
+    digest: b557fb794a3754fd8cd6798148a537bb912aa05da558be1ee620984112a13d57
+    name: initiative-api
+    type: application
+    urls:
+    - https://github.com/Albin-Soderholm-AB/initiative-infra/releases/download/initiative-api-0.1.0/initiative-api-0.1.0.tgz
+    version: 0.1.0
   initiative-client:
   - apiVersion: v2
     created: "2022-09-03T14:44:44.654114002Z"
