@@ -1,21 +1,32 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
   name: mysql
 spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  serviceName: mysql
   selector:
     matchLabels:
       app: mysql
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
         app: mysql
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
-        - image: albinprivateregistry.azurecr.io/initiative-mysql
-          name: mysql
+        - name: mysql
+          image: albinprivateregistry.azurecr.io/initiative-mysql
           resources:
             requests:
               cpu: 100m
@@ -23,6 +34,10 @@ spec:
             limits:
               cpu: 250m
               memory: 2Gi
+          ports:
+            - name: tpc
+              protocol: TCP
+              containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -36,23 +51,18 @@ spec:
                   key: password
             - name: MYSQL_USER
               value: appuser
-          ports:
-            - containerPort: 3306
-              name: mysql
           volumeMounts:
-            - name: mysql-persistent-storage
+            - name: data
               mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: mysql-pv-claim
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-spec:
-  ports:
-    - port: 3306
-  selector:
-    app: mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: azurefile-csi
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+          limits:
+            storage: 2Gi
