@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: initiative-client-app
-          image: albinprivateregistry.azurecr.io/initiative-client # Image that will be used to containers in the cluster
+          image: albinprivateregistry.azurecr.io/initiative-client:{{ .Values.dockerImageVersion }} # Image that will be used to containers in the cluster
           imagePullPolicy: Always
           resources:
             requests:

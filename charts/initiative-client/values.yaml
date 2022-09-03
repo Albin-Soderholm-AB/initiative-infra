@@ -80,3 +80,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+dockerImageVersion: 0.0.0
